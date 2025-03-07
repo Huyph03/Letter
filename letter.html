@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng 8/3</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffe6f2;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            text-align: center;
+        }
+        .envelope-wrapper {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: #ffb6c1;
+            border-radius: 10px;
+            border: 2px solid #ff69b4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: #ff69b4;
+            border-radius: 10px 10px 0 0;
+            clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+            transition: transform 0.5s ease-in-out;
+            transform-origin: top;
+        }
+        .seal {
+            position: absolute;
+            top: 65px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background: #ff4081;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            color: white;
+            font-weight: bold;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .letter {
+            position: absolute;
+            top: 55px;
+            width: 280px;
+            height: 200px;
+            background: #fffaf0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 20px;
+            font-family: 'Dancing Script', cursive;
+            color: #d63384;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        }
+        .open .flap {
+            transform: rotateX(180deg);
+        }
+        .open .envelope {
+            opacity: 0;
+        }
+        .open .letter {
+            opacity: 1;
+            transform: translateY(-60px);
+            font-size: 24px;
+        }
+        .open .seal {
+            display: none;
+        }
+        .gallery {
+    display: none;
+    position: relative;
+    width: 400px; /* Tăng kích thước vùng chứa */
+    height: 400px;
+    margin-top: -180px; /* Lùi toàn bộ ảnh lên trên */
+}
+
+.gallery img {
+    width: 120px; /* Tăng kích thước ảnh */
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+    position: absolute;
+}
+
+/* Sắp xếp ảnh thành hình bông hoa với khoảng cách hợp lý */
+.gallery img:nth-child(1) { /* Cánh trên */
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.gallery img:nth-child(2) { /* Cánh trên trái */
+    top: 28%;
+    left: 5%;
+}
+
+.gallery img:nth-child(3) { /* Cánh trên phải */
+    top: 28%;
+    right: 5%;
+}
+
+.gallery img:nth-child(4) { /* Cánh dưới trái */
+    bottom: 5%;
+    left: 15%;
+}
+
+.gallery img:nth-child(5) { /* Cánh dưới phải */
+    bottom: 5%;
+    right: 15%;
+}
+
+    .message {
+        display: none;
+        margin-top: 50px; /* Điều chỉnh khoảng cách giữa chữ và ảnh để cân đối */
+        font-size: 20px;
+        font-weight: bold;
+        color: #d63384;
+        text-align: center;
+    }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="envelope-wrapper" onclick="nextLetter()">
+        <div class="envelope">
+            <div class="flap"></div>
+            <div class="seal">🌸</div>
+        </div>
+        <div class="letter" id="letter">Chúc mừng ngày 8/3! Chúc bạn luôn xinh đẹp, hạnh phúc và thành công!</div>
+    </div>
+    <div class="gallery" id="gallery">
+        <img src="image1.jpg" alt="Ảnh 1">
+        <img src="image2.jpg" alt="Ảnh 2">
+        <img src="image3.jpg" alt="Ảnh 3">
+        <img src="image4.jpg" alt="Ảnh 4">
+        <img src="image5.jpg" alt="Ảnh 5">
+    </div>
+    <div class="message" id="message">Chúc bạn một ngày 8/3 đầy ý nghĩa và hạnh phúc!</div>
+    
+    <script>
+        let currentLetterIndex = 0;
+        const letters = [
+            "Chúc mừng ngày 8/3! Chúc bạn luôn xinh đẹp, hạnh phúc và thành công!",
+            "Bạn là người tuyệt vời nhất! Hãy luôn vui vẻ và mạnh mẽ nhé!",
+            "Hãy tận hưởng ngày đặc biệt này và nhớ rằng bạn luôn được yêu thương!"
+        ];
+
+        function nextLetter() {
+            const envelopeWrapper = document.querySelector('.envelope-wrapper');
+            const letter = document.getElementById('letter');
+            const gallery = document.getElementById('gallery');
+            const message = document.getElementById('message');
+            
+            if (!envelopeWrapper.classList.contains('open')) {
+                envelopeWrapper.classList.add('open');
+            } else {
+                currentLetterIndex++;
+                if (currentLetterIndex < letters.length) {
+                    letter.style.opacity = 0;
+                    setTimeout(() => {
+                        letter.innerHTML = letters[currentLetterIndex];
+                        letter.style.opacity = 1;
+                    }, 500);
+                } else {
+                    letter.style.opacity = 0;
+                    setTimeout(() => {
+                        letter.style.display = 'none';
+                        gallery.style.display = 'grid';
+                        message.style.display = 'block';
+                    }, 500);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
